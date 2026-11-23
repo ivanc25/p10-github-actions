@@ -1,0 +1,39 @@
+name: 04 - Profundizacion R1 (Inputs en Jobs)
+on:
+  workflow_dispatch:
+    inputs:
+      entorno:
+        description: "Selecciona el entorno para elegir el job activo"
+        required: true
+        default: "produccion"
+        type: choice
+        options:
+          - pruebas
+          - produccion
+      incluir_verificacion:
+        description: "Ejecutar job adicional de verificacion"
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  job-pruebas:
+    name: Job Entorno de Pruebas
+    if: ${{ inputs.entorno == 'pruebas' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Ejecutando pipeline ligero en entorno de PRUEBAS."
+
+  job-produccion:
+    name: Job Entorno de Produccion
+    if: ${{ inputs.entorno == 'produccion' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Ejecutando pipeline estricto en entorno de PRODUCCION."
+
+  job-verificacion:
+    name: Job Opcional de Verificacion
+    if: ${{ inputs.incluir_verificacion == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Verificacion adicional activada por input booleano."
