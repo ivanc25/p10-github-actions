@@ -25,8 +25,8 @@ jobs:
       - name: Mostrar valores del contexto inputs
         run: |
           echo "Hola, ${{ inputs.username }}"
-          echo "Desplegando en el entorno: ${{ inputs.environment }}"
+          echo "Entorno seleccionado -> ${{ inputs.environment }}"
 
       - name: Verificar entorno seleccionado
-        if: inputs.environment == 'produccion'
-        run: echo "Confirmado: desplegando en produccion"
+        if: ${{ inputs.environment == 'produccion' }}
+        run: echo "Confirmado despliegue en produccion"
