@@ -1,0 +1,24 @@
+name: 05 - Profundizacion R2 (Condiciones de Contexto)
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  evaluacion-condicional:
+    name: Condiciones (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Condicion basada en github.event_name
+        if: ${{ github.event_name == 'push' }}
+        run: echo "Ejecucion disparada automaticamente por evento: ${{ github.event_name }}"
+
+      - name: Condicion basada en runner.os (Linux)
+        if: ${{ runner.os == 'Linux' }}
+        run: echo "Paso activo unicamente en sistema operativo Linux (${{ runner.os }})"
+
+      - name: Condicion basada en matrix.os (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: echo "Paso activo unicamente en nodo de matriz Windows (${{ matrix.os }})"
