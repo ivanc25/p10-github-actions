@@ -13,12 +13,15 @@ jobs:
     steps:
       - name: Condicion basada en github.event_name
         if: ${{ github.event_name == 'push' }}
-        run: echo "Ejecucion disparada automaticamente por evento: ${{ github.event_name }}"
+        run: |
+          echo "Ejecucion disparada por evento -> ${{ github.event_name }}"
 
       - name: Condicion basada en runner.os (Linux)
         if: ${{ runner.os == 'Linux' }}
-        run: echo "Paso activo unicamente en sistema operativo Linux (${{ runner.os }})"
+        run: |
+          echo "Paso activo en Linux -> ${{ runner.os }}"
 
       - name: Condicion basada en matrix.os (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
-        run: echo "Paso activo unicamente en nodo de matriz Windows (${{ matrix.os }})"
+        run: |
+          echo "Paso activo en Windows -> ${{ matrix.os }}"
