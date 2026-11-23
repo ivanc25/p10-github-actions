@@ -1,0 +1,53 @@
+﻿name: 01 - Contextos Basicos
+on: [push]
+
+env:
+  GLOBAL_ENV: "Valor global de workflow"
+
+jobs:
+  inspeccion-basica:
+    name: Job de Inspeccion de Contextos
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Contexto github
+        run: |
+          echo "Repositorio: ${{ github.repository }}"
+          echo "Evento: ${{ github.event_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Rama/Ref: ${{ github.ref }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run ID / Number: ${{ github.run_id }} / ${{ github.run_number }}"
+
+      - name: 2 y 3. Contextos env y vars
+        env:
+          STEP_ENV: "Valor local del paso"
+        run: |
+          echo "Env global: ${{ env.GLOBAL_ENV }}"
+          echo "Env local: $STEP_ENV"
+          echo "Variable de repositorio (vars): ${{ vars.MY_GLOBAL_VAR }}"
+
+      - name: 4 y 6. Contextos job y steps (usando GITHUB_OUTPUT)
+        id: paso-generador
+        run: |
+          echo "Nombre del job: ${{ job.name }}"
+          echo "Estado actual del job: ${{ job.status }}"
+          echo "resultado=Datos_procesados_OK" >> $GITHUB_OUTPUT
+
+      - name: Leer output y estado del paso anterior
+        if: ${{ steps.paso-generador.conclusion == 'success' }}
+        run: |
+          echo "Salida recuperada de steps: ${{ steps.paso-generador.outputs.resultado }}"
+
+      - name: 7. Contexto runner
+        run: |
+          echo "OS: ${{ runner.os }} | Arch: ${{ runner.arch }}"
+          echo "Temp dir: ${{ runner.temp }}"
+          echo "Tool cache: ${{ runner.tool_cache }}"
+
+      - name: 8. Uso seguro de secrets (enmascaramiento automatico)
+        env:
+          API_TOKEN: ${{ secrets.MY_API_KEY }}
+        run: |
+          echo "Longitud del token cargado: ${#API_TOKEN} caracteres"
+          echo "Intento de impresion directa (enmascarado): $API_TOKEN"
