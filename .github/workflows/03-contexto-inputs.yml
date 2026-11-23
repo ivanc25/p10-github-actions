@@ -1,0 +1,32 @@
+﻿name: 03 - Contexto Inputs (Workflow Dispatch)
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: "Nombre de usuario"
+        required: true
+        default: "Invitado"
+        type: string
+      environment:
+        description: "Entorno de despliegue"
+        required: true
+        default: "produccion"
+        type: choice
+        options:
+          - desarrollo
+          - staging
+          - produccion
+
+jobs:
+  despliegue-manual:
+    name: Despliegue Manual con Inputs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mostrar valores del contexto inputs
+        run: |
+          echo "Hola, ${{ inputs.username }}"
+          echo "Desplegando en el entorno: ${{ inputs.environment }}"
+
+      - name: Verificar entorno seleccionado
+        if: ${{ inputs.environment == 'produccion' }}
+        run: echo "Confirmado: desplegando en produccion"
