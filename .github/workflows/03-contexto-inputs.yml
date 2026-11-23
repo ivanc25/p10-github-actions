@@ -1,4 +1,4 @@
-﻿name: 03 - Contexto Inputs (Workflow Dispatch)
+name: 03 - Contexto Inputs (Workflow Dispatch)
 on:
   workflow_dispatch:
     inputs:
@@ -28,5 +28,5 @@ jobs:
           echo "Desplegando en el entorno: ${{ inputs.environment }}"
 
       - name: Verificar entorno seleccionado
-        if: ${{ inputs.environment == 'produccion' }}
+        if: inputs.environment == 'produccion'
         run: echo "Confirmado: desplegando en produccion"
