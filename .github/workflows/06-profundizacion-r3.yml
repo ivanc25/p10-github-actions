@@ -1,0 +1,22 @@
+name: 06 - Profundizacion R3 (Diagnostico Seguro)
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  diagnostico-seguro:
+    name: Diagnostico Seguro del Entorno
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspeccionar metadatos publicos y de ejecucion
+        run: |
+          echo "=== DIAGNOSTICO SEGURO DE CONTEXTOS ==="
+          echo "Repositorio -> ${{ github.repository }}"
+          echo "Workflow -> ${{ github.workflow }}"
+          echo "Run ID / Attempt -> ${{ github.run_id }} / ${{ github.run_attempt }}"
+          echo "Evento y Rama -> ${{ github.event_name }} (${{ github.ref }})"
+          echo "Commit SHA -> ${{ github.sha }}"
+          echo "Actor -> ${{ github.actor }}"
+          echo "Runner OS / Arch -> ${{ runner.os }} / ${{ runner.arch }}"
+          echo "Variable publica (vars) -> ${{ vars.MY_GLOBAL_VAR }}"
+          echo "Secretos y tokens omitidos intencionadamente por seguridad."
