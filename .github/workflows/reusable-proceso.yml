@@ -1,0 +1,20 @@
+﻿name: Workflow Reutilizable
+on:
+  workflow_call:
+    inputs:
+      mensaje:
+        required: true
+        type: string
+    outputs:
+      dato_procesado:
+        description: "Salida devuelta por el workflow reutilizable"
+        value: ${{ jobs.generar-dato.outputs.resultado }}
+
+jobs:
+  generar-dato:
+    runs-on: ubuntu-latest
+    outputs:
+      resultado: ${{ steps.paso-out.outputs.valor }}
+    steps:
+      - id: paso-out
+        run: echo "valor=Procesado(${{ inputs.mensaje }})" >> $GITHUB_OUTPUT

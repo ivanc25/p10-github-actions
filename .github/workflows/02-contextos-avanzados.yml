@@ -1,0 +1,41 @@
+﻿name: 02 - Contextos Avanzados (Matrix, Jobs, Needs)
+on: [push]
+
+jobs:
+  matriz-pruebas:
+    name: Matriz (${{ matrix.os }} - Py ${{ matrix.python-version }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ['3.11', '3.12']
+        exclude:
+          - os: windows-latest
+            python-version: '3.11'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: 9 y 10. Contextos strategy y matrix
+        run: |
+          echo "OS: ${{ matrix.os }} | Python: ${{ matrix.python-version }}"
+          echo "Indice de job en estrategia: ${{ strategy.job-index }} de ${{ strategy.job-total }}"
+      - name: Ejecucion condicional solo en Ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: echo "Paso exclusivo para entorno Linux (ubuntu-latest)"
+
+  llamar-reutilizable:
+    uses: ./.github/workflows/reusable-proceso.yml
+    with:
+      mensaje: "TSCD-P10"
+
+  consolidar-resultados:
+    name: Consolidar Dependencias (needs y jobs)
+    runs-on: ubuntu-latest
+    needs: [matriz-pruebas, llamar-reutilizable]
+    steps:
+      - name: 5 y 11. Verificar salidas de needs y jobs
+        run: |
+          echo "Estado del job matriz-pruebas: ${{ needs.matriz-pruebas.result }}"
+          echo "Salida recibida del workflow reutilizable: ${{ needs.llamar-reutilizable.outputs.dato_procesado }}"
